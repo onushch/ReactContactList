@@ -1,0 +1,54 @@
+.navbar-brand-custom {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #c66234;
+  text-shadow: 0 5px 0 rgba(96, 183, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.nav-link-custom {
+  color: #563c2c;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+  color: #ffffff;
+  background-color: #60b7ff;
+  text-shadow: 0 5px 0 rgba(96, 183, 255, 0.5);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+}}
+
+
+
+.search-input {
+  font-size: 1.2rem;
+  border: 2px solid #60b7ff;
+  color: #60b7ff;
+  text-shadow: 0 3px 0 rgba(96, 183, 255, 0.5);
+  margin-right: 0.5rem;
+
+  &:focus {
+  outline: none;
+  box-shadow: 0 0 3px #60b7ff;
+
+}}
+
+
+.search-btn {
+  font-size: 1.2rem;
+  border: 2px solid #60b7ff;
+  color: #60b7ff;
+  background-color: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+  color: #ffffff;
+  border: 2px solid #60b7ff00;
+  background-color: #60b7ff;
+  text-shadow: 0 5px 0 rgba(96, 183, 255, 0.5);
+}
+}
+
+
