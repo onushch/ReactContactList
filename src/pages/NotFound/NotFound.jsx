@@ -13,10 +13,13 @@ export default function NotFound() {
 
       <div className="not-found">
         <h1>Page not found</h1>
-        <p>Unfortunately, nothing was found at the requested address. The link may be outdated, or the page may have been moved.</p>
+        <p>
+          Unfortunately, nothing was found at the requested address. The link
+          may be outdated, or the page may have been moved.
+        </p>
         <Link className="home-404" to="/">
           Home
-        </Link> 
+        </Link>
       </div>
     </div>
   );

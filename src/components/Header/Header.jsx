@@ -13,7 +13,6 @@ function Header({ onSearch }) {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary py-3">
       <Container>
-        {/* Бренд */}
         <Navbar.Brand href="/" className="navbar-brand-custom">
           Contact List
         </Navbar.Brand>
@@ -21,13 +20,10 @@ function Header({ onSearch }) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
 
-          {/* Навігація */}
           <Nav className="me-auto">
             <Nav.Link href="/new-contact" className="nav-link-custom">New contact</Nav.Link>
-            <Nav.Link href="/update" className="nav-link-custom">Update contact</Nav.Link>
           </Nav>
 
-          {/* Пошук */}
           <Form className="d-flex" onSubmit={handleSearch}>
             <Form.Control
               type="search"

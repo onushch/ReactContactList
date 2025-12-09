@@ -9,7 +9,7 @@ export default function ContactList({ stor }) {
         <div className="col-3">
           <Sidebar />
         </div>
-        <div className="col-9">
+        <div className="col-12">
           <ContactItem stor={stor} />
         </div>
       </div>

@@ -42,10 +42,12 @@ export default function NewContact({ onNewContact }) {
   });
 
   const navigate = useNavigate()
-  const handleSubmit = (value) =>{
-    onNewContact(value)
-    navigate('/')
-  }
+  const handleSubmit = (value) => {
+  const storedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
+  const updatedContacts = [...storedContacts, value];
+  localStorage.setItem("contacts", JSON.stringify(updatedContacts));
+  navigate('/');
+};
 
 
   return (
