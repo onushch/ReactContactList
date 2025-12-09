@@ -7,13 +7,15 @@ import { useEffect, useState } from "react";
 export default function UpdateContact() {
   const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
 
   useEffect(() => {
     const contactToEdit = localStorage.getItem("contactToEdit");
     if (contactToEdit) {
-      setInitialValues(JSON.parse(contactToEdit));
+      const contactData = JSON.parse(contactToEdit);
+      setInitialValues(contactData);
     } else {
-      navigate("/"); 
+      navigate("/");
     }
   }, [navigate]);
 
@@ -35,18 +37,31 @@ export default function UpdateContact() {
       .matches(phoneRegExp, "Phone number is not valid")
       .required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
-    avatar: Yup.string()
-      .url("Must be a valid URL (https://...)")
-      .required("Required"),
+    avatar: Yup.string().nullable(),
     gender: Yup.string().required("Required"),
     status: Yup.string().required("Required"),
     favorites: Yup.boolean(),
   });
 
+  const handleFileChange = (event, setFieldValue) => {
+    const file = event.currentTarget.files[0];
+    setAvatarFile(file);
+    if (file) {
+        setFieldValue("avatar", URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = (values) => {
     const storedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
+    let updatedAvatar = values.avatar;
+
+    if (avatarFile) {
+        updatedAvatar = URL.createObjectURL(avatarFile);
+    }
+
+    const updatedContact = { ...values, avatar: updatedAvatar };
     const updatedContacts = storedContacts.map((c) =>
-      c.id === values.id ? values : c
+      c.id === updatedContact.id ? updatedContact : c
     );
     localStorage.setItem("contacts", JSON.stringify(updatedContacts));
     localStorage.removeItem("contactToEdit");
@@ -63,7 +78,7 @@ export default function UpdateContact() {
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting, errors, touched }) => (
+        {({ isSubmitting, errors, touched, setFieldValue }) => (
           <Form className="contact-form">
             <div className="form-row">
               <div className="input-group">
@@ -132,18 +147,19 @@ export default function UpdateContact() {
             </div>
 
             <div className="input-group">
-              <label htmlFor="avatar">Avatar URL</label>
-              <Field
-                type="url"
-                name="avatar"
-                id="avatar"
-                className={errors.avatar && touched.avatar ? "input-error" : ""}
-              />
-              <ErrorMessage
-                name="avatar"
-                component="p"
-                className="text-danger"
-              />
+              <label htmlFor="avatarFile">Select Avatar</label>
+              <div className="file-upload-wrapper">
+                <label htmlFor="avatarFile" className="file-upload-label">
+                  {avatarFile ? `File Selected: ${avatarFile.name}` : "Choose File"}
+                </label>
+                <input
+                  type="file"
+                  name="avatarFile"
+                  id="avatarFile"
+                  accept="image/*"
+                  onChange={(event) => handleFileChange(event, setFieldValue)}
+                />
+              </div>
             </div>
 
             <div className="form-row">

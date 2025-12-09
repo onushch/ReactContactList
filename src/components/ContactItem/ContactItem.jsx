@@ -52,6 +52,7 @@ export default function ContactItem() {
         <thead>
           <tr>
             <th>#</th>
+            <th>Avatar</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -65,6 +66,17 @@ export default function ContactItem() {
           {contacts.map((contact, index) => (
             <tr key={contact.id}>
               <th>{index + 1}</th>
+
+              <td>
+                <div className="avatar-content">
+                  {contact.avatar ? (
+                    <img
+                      src={contact.avatar}
+                      className="contact-avatar"
+                    />
+                  ) : null}
+                </div>
+              </td>
               <td>{contact.firstName}</td>
               <td>{contact.lastName}</td>
               <td>{contact.email}</td>

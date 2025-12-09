@@ -3,8 +3,12 @@ import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { v4 as uuid4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function NewContact({ onNewContact }) {
+  const [avatarFile, setAvatarFile] = useState(null);
+  const navigate = useNavigate();
+
   const initialValues = {
     id: uuid4(),
     firstName: "",
@@ -33,18 +37,27 @@ export default function NewContact({ onNewContact }) {
       .matches(phoneRegExp, "Phone number is not valid")
       .required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
-    avatar: Yup.string()
-      .url("Must be a valid URL (https://...)")
-      .required("Required"),
+    avatar: Yup.string().nullable(),
     gender: Yup.string().required("Required"),
     status: Yup.string().required("Required"),
     favorites: Yup.boolean(),
   });
 
-  const navigate = useNavigate()
+  const handleFileChange = (event, setFieldValue) => {
+    const file = event.currentTarget.files[0];
+    setAvatarFile(file);
+    if (file) {
+        setFieldValue("avatar", file.name);
+    } else {
+        setFieldValue("avatar", "");
+    }
+  };
+
   const handleSubmit = (value) => {
   const storedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  const updatedContacts = [...storedContacts, value];
+  const newAvatar = avatarFile ? URL.createObjectURL(avatarFile) : "";
+  const newContact = { ...value, avatar: newAvatar };
+  const updatedContacts = [...storedContacts, newContact];
   localStorage.setItem("contacts", JSON.stringify(updatedContacts));
   navigate('/');
 };
@@ -59,7 +72,7 @@ export default function NewContact({ onNewContact }) {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, errors, touched }) => (
+        {({ isSubmitting, errors, touched, setFieldValue }) => (
           <Form className="contact-form">
             <div className="form-row">
               <div className="input-group">
@@ -68,7 +81,7 @@ export default function NewContact({ onNewContact }) {
                   type="text"
                   name="firstName"
                   id="firstName"
-                  placeholder="John"
+                  placeholder="Michael"
                   className={
                     errors.firstName && touched.firstName ? "input-error" : ""
                   }
@@ -86,7 +99,7 @@ export default function NewContact({ onNewContact }) {
                   type="text"
                   name="lastName"
                   id="lastName"
-                  placeholder="Doe"
+                  placeholder="Jackson"
                   className={
                     errors.lastName && touched.lastName ? "input-error" : ""
                   }
@@ -131,19 +144,19 @@ export default function NewContact({ onNewContact }) {
             </div>
 
             <div className="input-group">
-              <label htmlFor="avatar">Avatar URL</label>
-              <Field
-                type="url"
-                name="avatar"
-                id="avatar"
-                placeholder="https://image.com/..."
-                className={errors.avatar && touched.avatar ? "input-error" : ""}
-              />
-              <ErrorMessage
-                name="avatar"
-                component="p"
-                className="text-danger"
-              />
+              <label htmlFor="avatarFile">Select Avatar</label>
+              <div className="file-upload-wrapper">
+                <label htmlFor="avatarFile" className="file-upload-label">
+                  {avatarFile ? `File Selected: ${avatarFile.name}` : "Choose File"}
+                </label>
+                <input
+                  type="file"
+                  name="avatarFile"
+                  id="avatarFile"
+                  accept="image/*"
+                  onChange={(event) => handleFileChange(event, setFieldValue)}
+                />
+              </div>
             </div>
 
             <div className="form-row">

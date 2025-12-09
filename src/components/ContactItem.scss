@@ -4,7 +4,7 @@
 }
 
 .favText {
-    text-align: center;
+  text-align: center;
 }
 
 .table.table-striped {
@@ -16,25 +16,29 @@
     --bs-table-bg: #008cff1e;
   }
 }
+
 .table {
   background: var(--bgPrimary);
   border-radius: 14px;
-  overflow: hidden; 
+  overflow: hidden;
   box-shadow: 0 6px 18px var(--shadowLight);
 
   thead {
-    background: var(--bgAccent);
-
     th {
       color: var(--textMainStyle);
       font-weight: 700;
       text-align: center;
-      padding: 14px 10px;
-      font-size: 15px;
-      border-bottom: 2px solid var(--blueSoft); 
+      padding: 16px 12px; 
+      font-size: 16px;
+      border-bottom: 2px solid var(--blueSoft);
 
       &.favText {
         color: var(--blue);
+      }
+
+      &:nth-child(2) {
+        text-align: left;
+        padding-left: 20px;
       }
     }
   }
@@ -49,22 +53,36 @@
 
       th,
       td {
-        padding: 12px 10px;
+        padding: 18px 12px;
         vertical-align: middle;
-        font-size: 15px;
+        font-size: 16px;
         color: var(--textSecondary);
         text-align: center;
       }
 
-      td.favorite-cell {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
+      td:nth-child(2) {
+        text-align: left;
+        padding-left: 20px;
       }
     }
   }
 }
+
+
+.avatar-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 
 .delete-modal-overlay {
   position: fixed;
@@ -126,8 +144,3 @@
     }
   }
 }
-
-
-
-
-

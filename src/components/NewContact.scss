@@ -75,6 +75,46 @@
         font-size: 13px;
         color: #d9534f !important;
       }
+      
+      .file-upload-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .file-upload-label {
+        background: var(--blue);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        display: block;
+        text-align: center;
+        transition: background 0.25s ease, box-shadow 0.25s ease;
+        
+        &:hover {
+          background: #3ea0f8;
+          box-shadow: 0 0 10px var(--blueSoft);
+        }
+      }
+
+      input[type="file"] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        cursor: pointer;
+        display: block;
+      }
     }
 
     .favorite-checkbox-group {
