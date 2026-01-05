@@ -1,247 +1,81 @@
-import "../../components/NewContact.scss";
-import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { v4 as uuid4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import * as Yup from "yup";
+import "../../components/NewContact.scss";
 
-export default function NewContact({ onNewContact }) {
-  const [avatarFile, setAvatarFile] = useState(null);
+export default function NewContact({ onNewContact, statuses }) {
   const navigate = useNavigate();
 
-  const initialValues = {
-    id: uuid4(),
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    avatar: "",
-    gender: "",
-    status: "",
-    favorites: false,
-  };
-
-  const phoneRegExp =
-    /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
-
-  const validationSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    lastName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    phone: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
-    avatar: Yup.string().nullable(),
-    gender: Yup.string().required("Required"),
-    status: Yup.string().required("Required"),
-    favorites: Yup.boolean(),
-  });
-
-  const handleFileChange = (event, setFieldValue) => {
-    const file = event.currentTarget.files[0];
-    setAvatarFile(file);
+  const handleAvatarChange = (e, setFieldValue) => {
+    const file = e.target.files[0];
     if (file) {
-        setFieldValue("avatar", file.name);
-    } else {
-        setFieldValue("avatar", "");
+      const reader = new FileReader();
+      reader.onloadend = () => setFieldValue("avatar", reader.result);
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (value) => {
-  const storedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  const newAvatar = avatarFile ? URL.createObjectURL(avatarFile) : "";
-  const newContact = { ...value, avatar: newAvatar };
-  const updatedContacts = [...storedContacts, newContact];
-  localStorage.setItem("contacts", JSON.stringify(updatedContacts));
-  navigate('/');
-};
-
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string().required("Required"),
+    lastName: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
+    phone: Yup.string().required("Required"),
+    status: Yup.string().required("Required"),
+  });
 
   return (
-    <main className="main-container container mt-4">
-      <h1 className="text-center">Add New Contact</h1>
-
+    <main className="main-container container mt-5">
+      <h1>Create Contact</h1>
       <Formik
-        initialValues={initialValues}
+        initialValues={{ id: uuid4(), firstName: "", lastName: "", email: "", phone: "", status: "", favorites: false, avatar: "", gender: "man" }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(v) => { onNewContact(v); navigate("/"); }}
       >
-        {({ isSubmitting, errors, touched, setFieldValue }) => (
+        {({ setFieldValue, values }) => (
           <Form className="contact-form">
-            <div className="form-row">
-              <div className="input-group">
-                <label htmlFor="firstName">First name</label>
-                <Field
-                  type="text"
-                  name="firstName"
-                  id="firstName"
-                  placeholder="Michael"
-                  className={
-                    errors.firstName && touched.firstName ? "input-error" : ""
-                  }
-                />
-                <ErrorMessage
-                  name="firstName"
-                  component="p"
-                  className="text-danger"
-                />
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="lastName">Last name</label>
-                <Field
-                  type="text"
-                  name="lastName"
-                  id="lastName"
-                  placeholder="Jackson"
-                  className={
-                    errors.lastName && touched.lastName ? "input-error" : ""
-                  }
-                />
-                <ErrorMessage
-                  name="lastName"
-                  component="p"
-                  className="text-danger"
-                />
-              </div>
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="phone">Phone</label>
-              <Field
-                type="tel"
-                name="phone"
-                id="phone"
-                className={errors.phone && touched.phone ? "input-error" : ""}
-              />
-              <ErrorMessage
-                name="phone"
-                component="p"
-                className="text-danger"
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="email">Email</label>
-              <Field
-                type="email"
-                name="email"
-                id="email"
-                placeholder="example@mail.com"
-                className={errors.email && touched.email ? "input-error" : ""}
-              />
-              <ErrorMessage
-                name="email"
-                component="p"
-                className="text-danger"
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="avatarFile">Select Avatar</label>
-              <div className="file-upload-wrapper">
-                <label htmlFor="avatarFile" className="file-upload-label">
-                  {avatarFile ? `File Selected: ${avatarFile.name}` : "Choose File"}
+            <div className="avatar-upload-section text-center mb-4">
+              <div className="avatar-preview-wrapper mx-auto mb-3">
+                <img src={values.avatar || "https://via.placeholder.com/120"} />
+                <label htmlFor="avatar-input" className="upload-icon-label">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"/></svg>
                 </label>
-                <input
-                  type="file"
-                  name="avatarFile"
-                  id="avatarFile"
-                  accept="image/*"
-                  onChange={(event) => handleFileChange(event, setFieldValue)}
-                />
+              </div>
+              <input id="avatar-input" type="file" accept="image/*" hidden onChange={(e) => handleAvatarChange(e, setFieldValue)} />
+              <p className="small text-muted">Upload photo</p>
+            </div>
+
+            <div className="form-row">
+              <div className="input-group flex-grow-1">
+                <Field name="firstName" placeholder="First Name" />
+                <ErrorMessage name="firstName" component="p" className="text-danger" />
+              </div>
+              <div className="input-group flex-grow-1">
+                <Field name="lastName" placeholder="Last Name" />
+                <ErrorMessage name="lastName" component="p" className="text-danger" />
               </div>
             </div>
 
             <div className="form-row">
-              <div className="input-group">
-                <label htmlFor="gender">Gender</label>
-                <Field
-                  as="select"
-                  name="gender"
-                  id="gender"
-                  className={
-                    errors.gender && touched.gender ? "input-error" : ""
-                  }
-                >
-                  <option value="" disabled>
-                    Select gender
-                  </option>
-                  <option value="man">Man</option>
-                  <option value="woman">Woman</option>
-                </Field>
-                <ErrorMessage
-                  name="gender"
-                  component="p"
-                  className="text-danger"
-                />
+              <div className="input-group flex-grow-1">
+                <Field name="email" type="email" placeholder="Email Address" />
+                <ErrorMessage name="email" component="p" className="text-danger" />
               </div>
-
-              <div className="input-group">
-                <label htmlFor="status">Status</label>
-                <Field
-                  as="select"
-                  name="status"
-                  id="status"
-                  className={
-                    errors.status && touched.status ? "input-error" : ""
-                  }
-                >
-                  <option value="" disabled>
-                    Select status
-                  </option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Blocked">Blocked</option>
-                  <option value="Friend">Friend</option>
-                  <option value="Family">Family</option>
-                  <option value="Work">Work</option>
-                  <option value="Client">Client</option>
-                  <option value="Partner">Partner</option>
-                  <option value="Colleague">Colleague</option>
-                </Field>
-                <ErrorMessage
-                  name="status"
-                  component="p"
-                  className="text-danger"
-                />
+              <div className="input-group flex-grow-1">
+                <Field name="phone" placeholder="Phone Number" />
+                <ErrorMessage name="phone" component="p" className="text-danger" />
               </div>
             </div>
 
-            <div className="favorite-checkbox-group">
-              <Field
-                type="checkbox"
-                name="favorites"
-                id="favorites"
-                className="hidden-checkbox"
-              />
-              <label htmlFor="favorites" className="favorite-label">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-                <span>Add to Favorites</span>
-              </label>
-              <ErrorMessage
-                name="favorites"
-                component="p"
-                className="text-danger"
-              />
+            <div className="input-group">
+              <Field as="select" name="status">
+                <option value="">Select Status</option>
+                {statuses.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+              </Field>
+              <ErrorMessage name="status" component="p" className="text-danger" />
             </div>
 
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Saving..." : "Save Contact"}
-            </button>
+            <button type="submit" className="submit-btn mt-3">Save Contact</button>
           </Form>
         )}
       </Formik>
