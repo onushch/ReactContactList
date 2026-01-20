@@ -1,202 +1,120 @@
-$color-primary: #60b7ff;
-$color-danger: #ff5e5e;
-$color-text-main: #1e293b;
-$color-text-muted: #64748b;
-$bg-table-hover: #f8fafc;
-$shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
-$shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+.main-content-wrapper {
+  padding-bottom: 40px;
+}
 
 .table-responsive {
-  border-radius: 24px;
-  background: white;
-  padding: 10px;
-  box-shadow: $shadow-sm;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  padding: 8px;
 }
 
 .custom-table {
   width: 100%;
-  margin-bottom: 0;
-  vertical-align: middle;
-  border-collapse: collapse; // Виправлено для стабільності
+  border-collapse: separate;
+  border-spacing: 0 4px;
 
-  thead {
-    th {
-      background: transparent;
-      color: $color-text-muted;
-      font-weight: 700;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 16px 12px;
-      border: none;
-      border-bottom: 1px solid #f1f5f9;
-      white-space: nowrap;
-    }
+  thead th {
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 16px 24px;
+    border: none;
   }
 
-  tbody {
-    tr {
-      transition: all 0.2s ease;
+  tbody tr {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    
+    td {
+      padding: 18px 24px;
+      border: none;
+      vertical-align: middle;
+      background: transparent;
       
-      td {
-        padding: 16px 12px;
+      &:first-child { border-radius: var(--radius-lg) 0 0 var(--radius-lg); }
+      &:last-child { border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+    }
+
+    &:hover {
+      background: var(--bg-body);
+      transform: scale(1.005);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      
+      .btn-action {
         background: white;
-        border: none;
-        border-bottom: 1px solid #f8fafc;
-        color: $color-text-main;
-        font-size: 0.95rem;
-        text-align: center;
-
-        // Вирівнювання Full Name по лівому краю
-        &:nth-child(2) {
-          text-align: left;
-          font-weight: 600;
-        }
-      }
-
-      &:hover {
-        background-color: $bg-table-hover;
-        
-        td {
-          background-color: $bg-table-hover;
-        }
-      }
-
-      &:last-child td {
-        border-bottom: none;
+        box-shadow: var(--shadow-sm);
       }
     }
   }
 }
 
 .contact-avatar-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
   object-fit: cover;
+  box-shadow: var(--shadow-sm);
   border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 30px;
   font-size: 0.7rem;
   font-weight: 800;
   text-transform: uppercase;
-  white-space: nowrap;
-  background-color: rgba(var(--badge-color-rgb), 0.12) !important;
-  color: var(--badge-color) !important;
-  border: 1px solid rgba(var(--badge-color-rgb), 0.2);
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   
   &::before {
     content: "";
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background-color: var(--badge-color);
+    box-shadow: 0 0 8px var(--badge-color);
   }
 }
 
 .fav-trigger {
-  cursor: pointer;
-  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   
   &:hover {
-    background: rgba($color-primary, 0.05);
-    transform: scale(1.1);
-  }
-  
-  svg {
-    transition: all 0.3s ease;
+    background: #fff0f5;
+    transform: scale(1.15) rotate(5deg);
   }
 }
 
 .btn-action {
-  border: none;
-  background: #f1f5f9;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
   border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 6px 14px;
-  color: #64748b;
-  transition: all 0.2s ease;
-
+  transition: all 0.2s;
+  
   &:hover {
-    background: rgba($color-primary, 0.1);
-    color: $color-primary;
-    transform: translateY(-1px);
+    background: var(--bg-body);
+    color: var(--primary);
   }
-
+  
   &.text-danger:hover {
-    background: rgba($color-danger, 0.1);
-    color: $color-danger !important;
-  }
-}
-
-.delete-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.delete-modal {
-  background: white;
-  padding: 35px;
-  border-radius: 24px;
-  box-shadow: $shadow-md;
-  text-align: center;
-  max-width: 380px;
-  width: 90%;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-
-  h2 {
-    color: $color-text-main;
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 25px;
-    line-height: 1.4;
-  }
-
-  .modal-buttons {
-    display: flex;
-    gap: 12px;
-
-    button {
-      flex: 1;
-      padding: 10px;
-      border-radius: 12px;
-      border: none;
-      font-weight: 700;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-
-      &.cancel-btn {
-        background: #f1f5f9;
-        color: #64748b;
-        &:hover { background: #e2e8f0; }
-      }
-
-      &.confirm-btn {
-        background: $color-danger;
-        color: white;
-        &:hover { opacity: 0.9; transform: translateY(-1px); }
-      }
-    }
+    background: #fef2f2;
+    color: var(--danger) !important;
   }
 }
